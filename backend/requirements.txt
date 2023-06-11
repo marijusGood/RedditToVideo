@@ -1,0 +1,9 @@
+fastapi[all]
+praw
+regex
+librosa
+soundfile
+moviepy
+pillow
+python-multipart
+aiofiles

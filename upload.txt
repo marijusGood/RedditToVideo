@@ -1,0 +1,3 @@
+docker build -t reddit_to_video .
+docker run -it reddit_to_video
+gcloud run deploy reddittovideo --memory 2Gi --cpu 2 --port 80

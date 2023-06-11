@@ -1,0 +1,199 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Reddit Videos – Bringing Reddit to Life!</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<style>
+			#myProgress {
+			  width: 100%;
+			  background-color: #ddd;
+			}
+			
+			#myBar {
+			  width: 1%;
+			  height: 30px;
+			  background-color: #2753e3;
+			}
+			</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header" class="alt">
+						<span class="logo"><img style="width: 10%; border-radius: 50%;" src="images/logo.png" alt="" /></span>
+						<p>Reddit Videos – Bringing Reddit to Life!<br />
+						built by <a href="https://www.linkedin.com/in/marijus-g-aa0ba613b/">Marijus Gudiskis</a>.</p>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#intro" class="active">Introduction</a></li>
+							<li><a href="#first">How It Works</a></li>
+							<li><a href="#second">Example Video</a></li>
+							<li><a href="#cta">Customize Video</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Introduction -->
+							<section id="intro" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+											<h2>Reddit Videos – Bringing Reddit to Life!</h2>
+										</header>
+										<p>Welcome to Reddit Videos, the ultimate tool that lets you convert top Reddit posts into engaging, AI-voiced videos. You can customize the post selection, choose from the top posts, or even manually input your desired threads. Experience Reddit like never before!</p>
+									</div>
+									<span class="image"><img src="images/art.png" alt="" /></span>
+								</div>
+							</section>
+
+						<!-- How It Works Page -->
+							<section id="first" class="main special">
+								<header class="major">
+									<h2>How It Works - As Easy as 1, 2, 3!</h2>
+								</header>
+								<ul class="features">
+									<li>
+										<span class="icon solid major style1 fa-code"></span>
+										<h3>Choose Your Post</h3>
+										<p>Choose from the top trending posts on AskReddit, specify your favorite post URL, or manually input a question and desired answers.</p>
+									</li>
+									<li>
+										<span class="icon major style3 fa-copy"></span>
+										<h3>Customize Your Video</h3>
+										<p>Specify the length and select the voice of the AI narrator for your video. You have the control!</p>
+									</li>
+									<li>
+										<span class="icon major style5 fa-gem"></span>
+										<h3>Get Your Video</h3>
+										<p>Hit 'Create', and voila! Your personalized AskReddit video will be ready in a jiffy. Enjoy!</p>
+									</li>
+								</ul>
+								
+							</section>
+
+						<!-- Example Video -->
+							<section id="second" class="main special">
+								<header class="major">
+									<h2>See It in Action</h2>
+									<p>Check out a sample AskReddit Video below. This is a video created from one of the most popular AskReddit threads. Enjoy the AskReddit Videos experience!</p>
+								</header>
+								
+								<iframe width="560" height="315" src="https://www.youtube.com/embed/wC-ESWqdN5U" frameborder="0" allowfullscreen></iframe>
+
+
+							</section>
+
+						<!-- Get Started -->
+							<section id="cta" class="main special">
+								<header class="major">
+									<h2>Create Your AskReddit Video</h2>
+									
+								</header>
+								<footer class="major">
+
+										
+
+										<ul id="buttonsTable" class="actions special">
+											<li><a id="subreddit" class="button primary">Top post from subreddit</a></li>
+											<li><a id="secific" class="button">Specify the post</a></li>
+											<li><a id="custom" class="button">Input your own text</a></li>
+										</ul>
+
+										<ul id="inputFile" class="actions special">
+											<label for="file" style="padding-right: 1cm; font-size:30px;">Your logo:</label>
+											<input id="file" type="file" accept="image/jpeg, image/png, image/jpg">
+										</ul>
+
+										<ul id="defultLogo" class="actions special">
+											<label for="file" style="padding-right: 1cm; font-size:30px;">Default logo:</label>
+											<img src="images/reddit.png">
+										</ul>
+
+										<ul id="AISelect" class="actions special">
+											<label for="input1" style="padding-right: 1cm; font-size:30px;">Select AI voice (more info <a href="https://cloud.google.com/text-to-speech">here</a>):</label>
+											<select name="AI Voices" id="AIVoices" style="width: 30%;">
+												<option value="en-US-Neural2-G">en-US-Neural2-G</option>
+												<option value="en-US-Neural2-A">en-US-Neural2-A</option>
+												<option value="en-US-Neural2-C">en-US-Neural2-C</option>
+												<option value="en-US-Neural2-D">en-US-Neural2-D</option>
+												<option value="en-US-Neural2-E">en-US-Neural2-E</option>
+												<option value="en-US-Neural2-F">en-US-Neural2-F</option>
+												<option value="en-US-Neural2-H">en-US-Neural2-H</option>
+												<option value="en-US-Neural2-I">en-US-Neural2-I</option>
+												<option value="en-US-Neural2-J">en-US-Neural2-J</option>
+											  </select>
+										</ul>
+
+										<ul id="input1Table" class="actions special">
+											<label id="input1Label" for="input1" style="padding-right: 1cm; font-size:30px;">Subreddit:</label>
+											<input type="text" id="input1" name="input1" style="width: 50%;" placeholder="AskReddit">
+											
+										</ul>
+
+										<ul id="mainBody" style="display: none;" class="actions special">
+											<label for="input2" style="padding-right: 1cm; font-size:30px;">Main body: <br> (Max 170 Characters)</label>
+											<textarea id="input2" name="input2" style="width: 70%;"  cols="50" placeholder="Once hung out with a group of my close friends + one of said friends' close friend, who had recently been broken up with. we were all sitting outside, smoking a joint together, and out of the blue he starts going off on a weird misogynistic rant. as the only woman in the group, this was pretty uncomfortable for me."></textarea>
+										</ul>
+										
+										<ul id="submitTable" class="actions special">
+											<li><a id="submit" class="button">Submit</a></li>
+										</ul>
+
+										<ul class="actions special">
+											<label id="errorMessage" style="padding-right: 1cm; font-size:40px; color: red; display: none;" >E</label>
+										</ul>
+
+										<p style="display: none;" id="labelProcess">Making Video, give me a about 6 minutes... <br> The video will be automatically downloaded </p>
+										<div style="display: none;" id="myProgress">
+											<div id="myBar"></div>
+										</div>
+										<p style="display: none;" id="process"></p>
+								</footer>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+							<h2>About me</h2>
+							<p>I am a junior software developer based in Switzerland. If you want to add new features or work with me drop me an email!</p>
+							
+						</section>
+						<section>
+							<h2>Reach out to me!</h2>
+							<dl class="alt">
+								<dt>Email</dt>
+								<dd>marijus.good@gmail.com</dd>
+							</dl>
+							
+						</section>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+			<script src="assets/js/buttonOverlay.js"></script>
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
