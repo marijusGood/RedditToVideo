@@ -117,7 +117,7 @@ function move() {
     var start = Date.now();
 
     // Calculate the end time (3 minutes from now)
-    var end = start + (6 * 60 * 1000);
+    var end = start + (3 * 60 * 1000);
 
     id = setInterval(frame, 10);
     
@@ -141,8 +141,6 @@ function move() {
 }
 
 
-
-
 async function downloadVideo(data, url, file) {
     let formData = new FormData();
     formData.append('input', JSON.stringify(data));
@@ -150,7 +148,7 @@ async function downloadVideo(data, url, file) {
         formData.append('image', file);
     }
 
-    const response = await fetch('https://reddittovideo-h5lewdmwpa-ue.a.run.app/' + url, {
+    const response = await fetch('http://localhost/' + url, {
         method: 'POST',
         body: formData
     });

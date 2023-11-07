@@ -5,3 +5,4 @@
 /backend/comments*
 /original.mp4
 /backend/secrets.json
+/backend/__pycache__*

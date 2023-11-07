@@ -117,7 +117,7 @@ class Video:
         text_clip = TextClip(intro_text, fontsize=50, color='black', stroke_color='black', stroke_width=3, font='Arial-Bold', size=(608, 700), align="south", method="caption", bg_color='white')
         text_clip = text_clip.set_duration(duration).set_position(('center', 'top'))
 
-
+        image = os.path.abspath(image)
         image = Image.open(image).convert("RGBA")
         image_np = np.array(image)
 

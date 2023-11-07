@@ -3,6 +3,16 @@ import json
 
 class Reddit:
 
+    def __init__(self):
+        json_data = self.getKeys()
+
+        self.reddit = praw.Reddit(
+        client_id=json_data['reddit_client_id'],
+        client_secret=json_data['reddit_client_secret'],
+        user_agent='MyRedditApp/1.0',
+        check_for_async=False
+    )
+
     def getKeys(self):
         with open('secrets.json') as file:
             # Load the JSON data
@@ -10,15 +20,8 @@ class Reddit:
 
         return data
     
-    json_data = getKeys()
-
     # Initialize the Reddit API client
-    reddit = praw.Reddit(
-        client_id=json_data.reddit_client_id,
-        client_secret=json_data.reddit_client_secret,
-        user_agent='MyRedditApp/1.0',
-        check_for_async=False
-    )
+    
 
     def getCustomPost(self, url):
         post = self.reddit.submission(url=url)

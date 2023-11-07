@@ -9,7 +9,7 @@ class googleVoice:
             # Load the JSON data
             data = json.load(file)
 
-        return data.google_api_key
+        return data['google_api_key']
 
     def getVoice(self, text, filename, voice = "en-US-Neural2-G"):
         # Set up the request parameters

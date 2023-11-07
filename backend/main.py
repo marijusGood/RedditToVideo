@@ -13,16 +13,6 @@ class userModel(BaseModel):
     email: str
     AIvoice: str
 
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate_to_json
-
-    @classmethod
-    def validate_to_json(cls, value):
-        if isinstance(value, str):
-            return cls(**json.loads(value))
-        return value
-
 class customVideo(userModel):
     title: str
     answers: str
@@ -70,33 +60,40 @@ async def saveImage(image):
     image_content = await image.read()
     with open(image.filename, 'wb') as f:
         f.write(image_content)
+    return image.filename
 
 
 @app.post("/subreddit")
-async def subreddit(input: subredditModel = Body(...), image: UploadFile = None):
+async def subreddit(input: str = Form(...), image: UploadFile = File(None)):
+    input_data = json.loads(input)
+    input_proccessed = subredditModel(**input_data)
+
     removeFile()
     
     try:
         if image is not None:
             await saveImage(image)
-            temp = video.subreddit(input.subreddit, input.AIvoice, image.filename)
+            temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice, input_proccessed.filename)
         else:
-            temp = video.subreddit(input.subreddit, input.AIvoice)
+            temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice)
 
         return await returnFile(temp)
     except:
         return {"error": "Something went wrong"}
 
 @app.post("/subredditpost")
-async def subredditpost(input: subredditUrlModel = Body(...), image: UploadFile = None):
+async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
+    input_data = json.loads(input)
+    input_proccessed = subredditUrlModel(**input_data)
+
     removeFile()
 
     try:
         if image is not None:
             await saveImage(image)
-            temp = video.customPost(input.url, input.AIvoice, image.filename)
+            temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice, input_proccessed.filename)
         else:
-            temp = video.customPost(input.url, input.AIvoice)
+            temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice)
 
         return await returnFile(temp)
     except:
@@ -104,16 +101,21 @@ async def subredditpost(input: subredditUrlModel = Body(...), image: UploadFile 
 
 
 @app.post("/customvideo")
-async def customvideo(input: customVideo = Body(...), image: UploadFile = None):
-    removeFile()
+async def customvideo(input: str = Form(...), image: UploadFile = File(None)):
 
+    input_data = json.loads(input)
+    input_proccessed = customVideo(**input_data)
+    
+    removeFile()
+    
     try:
         if image is not None:
-            await saveImage(image)
-            video.customVideo(input.title, input.answers, input.AIvoice, image.filename)
+            filename = await saveImage(image)
+            video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, filename)
         else:
-            video.customVideo(input.title, input.answers, input.AIvoice)
+            video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
 
+        # Your logic to return a file
         return await returnFile(temp)
     except:
         return {"error": "Something went wrong"}
