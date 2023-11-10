@@ -148,7 +148,7 @@ async function downloadVideo(data, url, file) {
         formData.append('image', file);
     }
 
-    const response = await fetch('http://reddit-to-video:8000/' + url, {
+    const response = await fetch('https://reddit-to-video-api.marijusgudiskis.com/' + url, {
         method: 'POST',
         body: formData
     });
