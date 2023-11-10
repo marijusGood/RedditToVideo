@@ -78,8 +78,10 @@ async def subreddit(input: str = Form(...), image: UploadFile = File(None)):
             temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice)
 
         return await returnFile(temp)
-    except:
-        return {"error": "Something went wrong"}
+    except Exception as e:
+        print(e)
+        error_message = str(e)
+        return {"error": error_message}
 
 @app.post("/subredditpost")
 async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
@@ -96,8 +98,10 @@ async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
             temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice)
 
         return await returnFile(temp)
-    except:
-        return {"error": "Something went wrong"}
+    except Exception as e:
+        print(e)
+        error_message = str(e)
+        return {"error": error_message}
 
 
 @app.post("/customvideo")
@@ -117,5 +121,7 @@ async def customvideo(input: str = Form(...), image: UploadFile = File(None)):
 
         # Your logic to return a file
         return await returnFile(temp)
-    except:
-        return {"error": "Something went wrong"}
+    except Exception as e:
+        print(e)
+        error_message = str(e)
+        return {"error": error_message}
