@@ -1,12 +1,16 @@
-FROM arm64v8/python:3.8
+FROM arm64v8/python:3.10
 
 WORKDIR /code
-
+RUN apt update && apt upgrade -y 
+RUN apt install -y build-essential
+RUN apt install -y libyaml-dev
+RUN pip install --upgrade pip setuptools
+RUN pip install Cython
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Update and install system dependencies
-RUN apt update && apt upgrade -y 
+
 RUN rm -f /etc/ImageMagick-6/policy.xml
 
 RUN apt install -y ffmpeg libsndfile1 ghostscript
