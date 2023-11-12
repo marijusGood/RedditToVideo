@@ -26,7 +26,6 @@ class subredditUrlModel(userModel):
 
 app = FastAPI()
 video = Video()
-temp = "Something went wrong"
 
 app.add_middleware(
     CORSMiddleware,
@@ -67,7 +66,7 @@ async def saveImage(image):
 async def subreddit(input: str = Form(...), image: UploadFile = File(None)):
     input_data = json.loads(input)
     input_proccessed = subredditModel(**input_data)
-
+    temp = ""
     removeFile()
     
     try:
@@ -87,7 +86,7 @@ async def subreddit(input: str = Form(...), image: UploadFile = File(None)):
 async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
     input_data = json.loads(input)
     input_proccessed = subredditUrlModel(**input_data)
-
+    temp = ""
     removeFile()
 
     try:
@@ -109,18 +108,27 @@ async def customvideo(input: str = Form(...), image: UploadFile = File(None)):
 
     input_data = json.loads(input)
     input_proccessed = customVideo(**input_data)
-    
+    temp = ""
     removeFile()
     
     try:
         if image is not None:
             filename = await saveImage(image)
-            video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, filename)
+            temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, filename)
         else:
-            video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
+            temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
 
         # Your logic to return a file
         return await returnFile(temp)
+    except Exception as e:
+        print(e)
+        error_message = str(e)
+        return {"error": error_message}
+
+@app.get("/get-video")
+async def test(id: str):
+    try:
+        return await returnFile("")
     except Exception as e:
         print(e)
         error_message = str(e)
