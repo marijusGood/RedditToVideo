@@ -84,7 +84,7 @@ async def subreddit(background_tasks: BackgroundTasks, input: str = Form(...), i
         else:
             background_tasks.add_task(video.subreddit, input_proccessed.subreddit, input_proccessed.AIvoice, video_name)
             #temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice)
-
+        video.writeToJSON("in progress", video_name)
         return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
@@ -106,7 +106,7 @@ async def subredditpost(background_tasks: BackgroundTasks, input: str = Form(...
         else:
             background_tasks.add_task(video.customPost, input_proccessed.url, input_proccessed.AIvoice, video_name)
             #temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice)
-
+        video.writeToJSON("in progress", video_name)
         return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
@@ -131,7 +131,7 @@ async def customvideo(background_tasks: BackgroundTasks, input: str = Form(...),
             background_tasks.add_task(video.customVideo, input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, video_name)
             #temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
 
-        # Your logic to return a file
+        video.writeToJSON("in progress", video_name)
         return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
@@ -145,13 +145,16 @@ async def test(id: str):
         data = json.load(file)
         print(data)
     if id in data:
+        if data[id] == "in progress":
+            return {"progress": data[id]}
+        if data[id] == "done":
+            try:
+                return await returnFile(id)
+            except Exception as e:
+                print(e)
+                error_message = str(e)
+                return {"error": error_message}
         return {"error": data[id]}
 
-    try:
-        return await returnFile(id)
-    except Exception as e:
-        print(e)
-        error_message = str(e)
-        return {"error": error_message}
 
 

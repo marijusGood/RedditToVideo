@@ -14,14 +14,14 @@ import os
 
 class Video:
 
-    def writeToJSON(self, error, video_name, filename='errors.json'):
+    def writeToJSON(self, text, video_name, filename='errors.json'):
         try:
             with open(filename, 'r') as file:
                 data = json.load(file)
         except FileNotFoundError:
             print("File not found")
 
-        data[video_name] = error
+        data[video_name] = text
         with open(filename, 'w') as file:
             json.dump(data, file, indent=4)
         
@@ -237,3 +237,4 @@ class Video:
                 pass
         os.remove("intro.mp3")
         os.remove("comments.mp3")
+        self.writeToJSON("done", video_name)

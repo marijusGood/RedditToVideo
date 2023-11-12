@@ -148,7 +148,7 @@ async function submitVideoForProccessing(data, url, file) {
     if(file != null){
         formData.append('image', file);
     }
-
+    //http://localhost:8000/
     const response = await fetch('https://reddit-to-video-api.marijusgudiskis.com/' + url, {
         method: 'POST',
         body: formData
@@ -178,7 +178,7 @@ async function submitVideoForProccessing(data, url, file) {
         }
     }
 }
-
+//http://localhost:8000/
 async function downloadVideo() {
     const response = await fetch('https://reddit-to-video-api.marijusgudiskis.com/get-video/' + videoId, {
         method: 'GET',
@@ -199,9 +199,8 @@ async function downloadVideo() {
                 showInputs();
                 errorMessage.innerHTML = "Error: " + data.error;
                 errorMessage.style.display = "";
-                
+                clearInterval(interval);
             }
-            clearInterval(interval);
         } else {
             // If the response is a stream, stream it to a file
             const reader = response.body.getReader();
