@@ -1,5 +1,5 @@
 from typing import List, Optional
-from fastapi import FastAPI, Form, UploadFile, File, Depends, Body
+from fastapi import FastAPI, Form, UploadFile, File, Depends, Body, BackgroundTasks
 from pydantic import BaseModel, conint
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +8,8 @@ import uvicorn
 import json
 import os
 from video import Video
+import random
+import string
 
 class userModel(BaseModel):
     email: str
@@ -35,25 +37,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-async def file_stream():
-        async with aiofiles.open("output_video.mp4", mode='rb') as f:
+def generate_random_string(length=10):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for i in range(length))
+    return random_string
+
+async def file_stream(path):
+        async with aiofiles.open(f"{path}.mp4", mode='rb') as f:
             while True:
                 chunk = await f.read(1024)
                 if not chunk:
                     break
                 yield chunk
 
-async def returnFile(temp):
-    if os.path.exists("output_video.mp4"):
-        return StreamingResponse(file_stream(), media_type="video/x-msvideo")
-    else:
-        return {"error": temp}
+async def returnFile(path):
+    if os.path.exists(f"{path}.mp4"):
+        return StreamingResponse(file_stream(path), media_type="video/x-msvideo")
+
 
 def removeFile():
-    try:
-        os.remove("output_video.mp4")
-    except:
-        pass
+    prefix = "video-"
+    for filename in os.listdir('.'):
+        if filename.startswith(prefix):
+            os.remove(filename)
+            print(f"Removed: {filename}")
 
 async def saveImage(image):
     image_content = await image.read()
@@ -63,40 +70,44 @@ async def saveImage(image):
 
 
 @app.post("/subreddit")
-async def subreddit(input: str = Form(...), image: UploadFile = File(None)):
+async def subreddit(background_tasks: BackgroundTasks, input: str = Form(...), image: UploadFile = File(None)):
     input_data = json.loads(input)
     input_proccessed = subredditModel(**input_data)
-    temp = ""
+    video_name = "video-" + generate_random_string()
     removeFile()
     
     try:
         if image is not None:
             await saveImage(image)
-            temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice, input_proccessed.filename)
+            background_tasks.add_task(video.subreddit, input_proccessed.subreddit, input_proccessed.AIvoice, video_name, input_proccessed.filename)
+            #temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice, input_proccessed.filename)
         else:
-            temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice)
+            background_tasks.add_task(video.subreddit, input_proccessed.subreddit, input_proccessed.AIvoice, video_name)
+            #temp = video.subreddit(input_proccessed.subreddit, input_proccessed.AIvoice)
 
-        return await returnFile(temp)
+        return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
         error_message = str(e)
         return {"error": error_message}
 
 @app.post("/subredditpost")
-async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
+async def subredditpost(background_tasks: BackgroundTasks, input: str = Form(...), image: UploadFile = File(None)):
     input_data = json.loads(input)
     input_proccessed = subredditUrlModel(**input_data)
-    temp = ""
+    video_name = "video-" + generate_random_string()
     removeFile()
 
     try:
         if image is not None:
             await saveImage(image)
-            temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice, input_proccessed.filename)
+            background_tasks.add_task(video.customPost, input_proccessed.url, input_proccessed.AIvoice, video_name, input_proccessed.filename)
+            #temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice, input_proccessed.filename)
         else:
-            temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice)
+            background_tasks.add_task(video.customPost, input_proccessed.url, input_proccessed.AIvoice, video_name)
+            #temp = video.customPost(input_proccessed.url, input_proccessed.AIvoice)
 
-        return await returnFile(temp)
+        return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
         error_message = str(e)
@@ -104,32 +115,43 @@ async def subredditpost(input: str = Form(...), image: UploadFile = File(None)):
 
 
 @app.post("/customvideo")
-async def customvideo(input: str = Form(...), image: UploadFile = File(None)):
+async def customvideo(background_tasks: BackgroundTasks, input: str = Form(...), image: UploadFile = File(None)):
 
     input_data = json.loads(input)
     input_proccessed = customVideo(**input_data)
-    temp = ""
+    video_name = "video-" + generate_random_string()
     removeFile()
     
     try:
         if image is not None:
             filename = await saveImage(image)
-            temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, filename)
+            background_tasks.add_task(video.customVideo, input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, video_name, filename)
+            #temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, filename)
         else:
-            temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
+            background_tasks.add_task(video.customVideo, input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice, video_name)
+            #temp = video.customVideo(input_proccessed.title, input_proccessed.answers, input_proccessed.AIvoice)
 
         # Your logic to return a file
-        return await returnFile(temp)
+        return {"video_name": str(video_name)}
     except Exception as e:
         print(e)
         error_message = str(e)
         return {"error": error_message}
 
-@app.get("/get-video")
+@app.get("/get-video/{id}")
 async def test(id: str):
+    filename='errors.json'
+    with open(filename, 'r') as file:
+        data = json.load(file)
+        print(data)
+    if id in data:
+        return {"error": data[id]}
+
     try:
-        return await returnFile("")
+        return await returnFile(id)
     except Exception as e:
         print(e)
         error_message = str(e)
         return {"error": error_message}
+
+

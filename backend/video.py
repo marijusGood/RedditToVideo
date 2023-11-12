@@ -6,12 +6,25 @@ from PIL import Image
 import numpy as np
 import librosa
 import time
+import json
 import soundfile as sf
 from moviepy.editor import *
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 import os
 
 class Video:
+
+    def writeToJSON(self, error, video_name, filename='errors.json'):
+        try:
+            with open(filename, 'r') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            print("File not found")
+
+        data[video_name] = error
+        with open(filename, 'w') as file:
+            json.dump(data, file, indent=4)
+        
 
     def cutAudio(self, audio_text, start, end):
         audio, sr = librosa.load(f"{audio_text}.mp3", sr=None)
@@ -34,30 +47,32 @@ class Video:
         
         return sentences
 
-    def subreddit(self, subreddit, AIvoiceNumber, image = "reddit.png"):
+    def subreddit(self, subreddit, AIvoiceNumber, video_name, image = "reddit.png"):
         reddit = Reddit()
 
         try:
             intro_text, text_list = reddit.getSubreddit(subreddit)
+            self.createVideo(intro_text, text_list, image, AIvoiceNumber, video_name)
         except:
-            return "Subreddit not found"
+            self.writeToJSON("Subreddit not found", video_name)
         
-        self.createVideo(intro_text, text_list, image, AIvoiceNumber)
+        
 
-    def customVideo(self, title, answers, AIvoiceNumber, image = "reddit.png"):
-        self.createVideo(title, [answers], image, AIvoiceNumber)
+    def customVideo(self, title, answers, AIvoiceNumber, video_name, image = "reddit.png"):
+        self.createVideo(title, [answers], image, AIvoiceNumber, video_name)
     
-    def customPost(self, url, AIvoiceNumber, image = "reddit.png"):
+    def customPost(self, url, AIvoiceNumber, video_name, image = "reddit.png"):
         reddit = Reddit()
 
         try:
             intro_text, text_list = reddit.getCustomPost(url)
+            self.createVideo(intro_text, text_list, image, AIvoiceNumber, video_name)
         except:
-            return "Post not found"
+            self.writeToJSON("Post not found", video_name)
         
-        self.createVideo(intro_text, text_list, image, AIvoiceNumber)
+        
 
-    def createVideo(self, intro_text, text_list, image, AIvoiceNumber):
+    def createVideo(self, intro_text, text_list, image, AIvoiceNumber, video_name):
 
         text_clips = []
         audio_durations = []
@@ -213,7 +228,7 @@ class Video:
         final_video = final_video.set_audio(combined_audio)
         total_duration = sum(audio_durations)
         final_video = final_video.set_duration(total_duration)
-        final_video.write_videofile("output_video.mp4", codec="libx264", audio_codec="aac")
+        final_video.write_videofile(f"{video_name}.mp4", codec="libx264", audio_codec="aac")
 
         for i in range(len(text_list)):
             try:

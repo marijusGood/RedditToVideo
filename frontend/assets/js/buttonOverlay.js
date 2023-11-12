@@ -20,6 +20,8 @@ var AIVoices = document.getElementById('AIVoices');
 var AISelect = document.getElementById('AISelect');
 var errorMessage = document.getElementById('errorMessage');
 var option = 1;
+var interval = null;
+var videoId = null;
 
 subreddit.onclick = function () {
     reset();
@@ -91,7 +93,7 @@ submitButton.onclick = function () {
     hideInputs();
 
     move();
-    downloadVideo(data, url, fileData);
+    submitVideoForProccessing(data, url, fileData);
 }
 
 function reset() {
@@ -116,8 +118,8 @@ function move() {
     // Get the current time
     var start = Date.now();
 
-    // Calculate the end time (3 minutes from now)
-    var end = start + (3 * 60 * 1000);
+    // Calculate the end time (4 minutes from now)
+    var end = start + (4 * 60 * 1000);
 
     id = setInterval(frame, 10);
     
@@ -140,8 +142,7 @@ function move() {
     }
 }
 
-
-async function downloadVideo(data, url, file) {
+async function submitVideoForProccessing(data, url, file) {
     let formData = new FormData();
     formData.append('input', JSON.stringify(data));
     if(file != null){
@@ -169,6 +170,38 @@ async function downloadVideo(data, url, file) {
                 errorMessage.innerHTML = "Error: " + data.error;
                 errorMessage.style.display = "";
             }
+            if(data.video_name) {
+                console.log('video_name:', data.video_name);
+                videoId = data.video_name;
+                interval = setInterval(downloadVideo, 5000);
+            }
+        }
+    }
+}
+
+async function downloadVideo() {
+    const response = await fetch('https://reddit-to-video-api.marijusgudiskis.com/get-video/' + videoId, {
+        method: 'GET',
+    });
+
+    // Check if the response is OK (status 200-299)
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    } else {
+        // Check the content type of the response
+        const contentType = response.headers.get("content-type");
+
+        // If the response is JSON, it may be an error message
+        if(contentType && contentType.indexOf("application/json") !== -1) {
+            const data = await response.json();
+            if(data.error) {
+                console.error('Server error:', data.error);
+                showInputs();
+                errorMessage.innerHTML = "Error: " + data.error;
+                errorMessage.style.display = "";
+                
+            }
+            clearInterval(interval);
         } else {
             // If the response is a stream, stream it to a file
             const reader = response.body.getReader();
@@ -189,6 +222,7 @@ async function downloadVideo(data, url, file) {
             });
             const newResponse = new Response(stream);
             const blob = await newResponse.blob();
+            clearInterval(interval);
             
             // Save the file using FileSaver
             saveAs(blob, 'myvideo.mp4');
