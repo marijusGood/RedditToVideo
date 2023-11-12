@@ -118,8 +118,8 @@ function move() {
     // Get the current time
     var start = Date.now();
 
-    // Calculate the end time (4 minutes from now)
-    var end = start + (4 * 60 * 1000);
+    // Calculate the end time (5 minutes from now)
+    var end = start + (5 * 60 * 1000);
 
     id = setInterval(frame, 10);
     
