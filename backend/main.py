@@ -149,6 +149,7 @@ async def test(id: str):
             return {"progress": data[id]}
         if data[id] == "done":
             try:
+                print(f"sending: {data[id]}")
                 return await returnFile(id)
             except Exception as e:
                 print(e)

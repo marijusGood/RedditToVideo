@@ -53,8 +53,8 @@ class Video:
         try:
             intro_text, text_list = reddit.getSubreddit(subreddit)
             self.createVideo(intro_text, text_list, image, AIvoiceNumber, video_name)
-        except:
-            self.writeToJSON("Subreddit not found", video_name)
+        except Exception as e:
+            self.writeToJSON(e, video_name)
         
         
 
@@ -67,8 +67,8 @@ class Video:
         try:
             intro_text, text_list = reddit.getCustomPost(url)
             self.createVideo(intro_text, text_list, image, AIvoiceNumber, video_name)
-        except:
-            self.writeToJSON("Post not found", video_name)
+        except Exception as e:
+            self.writeToJSON(e, video_name)
         
         
 
@@ -233,7 +233,7 @@ class Video:
         for i in range(len(text_list)):
             try:
                 os.remove(f"temp_audio{i}.mp3")
-            except:
+            except Exception as e:
                 pass
         os.remove("intro.mp3")
         os.remove("comments.mp3")
