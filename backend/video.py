@@ -228,7 +228,7 @@ class Video:
         final_video = final_video.set_audio(combined_audio)
         total_duration = sum(audio_durations)
         final_video = final_video.set_duration(total_duration)
-        final_video.write_videofile(f"{video_name}.mp4", codec="libx264", audio_codec="aac")
+        final_video.write_videofile(f"{video_name}.mp4", codec="mpeg4", audio_codec="libmp3lame")
 
         for i in range(len(text_list)):
             try:
