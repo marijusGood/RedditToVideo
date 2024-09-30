@@ -118,7 +118,7 @@ class Video:
 
         text_list = temp
         voice.getVoice(intro_text, "intro.mp3", AIvoiceNumber)
-        self.cutAudio("intro", 0.3, 0.4)
+        self.cutAudio("intro", 0.1, 0.1)
         audio, sr = librosa.load("intro.mp3", sr=None)
         audio_list.append(audio)
         sr_list.append(sr)
@@ -194,7 +194,7 @@ class Video:
 
             voice.getVoice(text, f"temp_audio{i}.mp3", AIvoiceNumber)
             time.sleep(1)
-            self.cutAudio(f"temp_audio{i}", 0.3, 0.37)
+            self.cutAudio(f"temp_audio{i}", 0.1, 0.1)
             audio, sr = librosa.load(f"temp_audio{i}.mp3", sr=None)
             audio_list.append(audio)
             sr_list.append(sr)
