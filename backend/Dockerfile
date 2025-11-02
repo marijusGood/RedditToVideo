@@ -18,7 +18,7 @@ RUN apt install -y ffmpeg libsndfile1 ghostscript
 COPY . /code
 
 # Copy policy.xml for ImageMagick
-RUN cp /code/policy.xml /etc/ImageMagick-6/policy.xml
+RUN cp /code/policy.xml /etc/ImageMagick-7/policy.xml
 
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
